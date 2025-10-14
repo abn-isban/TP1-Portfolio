@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio - Ahmed Satour</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #FFFFFF;
+            color: #1D2939;
+            line-height: 1.6;
+            position: relative;
+        }
+        
+        /* GRID SYSTEM - 12 COLUMNS */
+        .grid-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 1280px;
+            height: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            pointer-events: none;
+            z-index: 9999;
+            display: none;
+        }
+        
+        .grid-overlay.active {
+            display: block;
+        }
+        
+        .grid-columns {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 24px;
+            height: 100%;
+            padding: 0 80px;
+        }
+        
+        .grid-column {
+            background: rgba(68, 76, 231, 0.1);
+            border-left: 1px solid rgba(68, 76, 231, 0.3);
+            border-right: 1px solid rgba(68, 76, 231, 0.3);
+        }
+        
+        /* CONTAINER SYSTEM */
+        .page-wrapper {
+            width: 1280px;
+            margin: 0 auto;
+            background: #FFFFFF;
+        }
+        
+        .container {
+            padding: 0 80px;
+        }
+        
+        .grid-12 {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 24px;
+        }
+        
+        /* HEADER */
+        header {
+            padding: 40px 0;
+        }
+        
+        .header-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 24px;
+            align-items: center;
+        }
+        
+        .logo {
+            grid-column: 1 / 4;
+            font-size: 24px;
+            font-weight: 600;
+            color: #1D2939;
+        }
+        
+        .nav-links {
+            grid-column: 10 / 13;
+            display: flex;
+            gap: 40px;
+            list-style: none;
+            justify-content: flex-end;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: #667085;
+            font-size: 18px;
+            font-weight: 500;
+            transition: color 0.3s;
+            white-space: nowrap;
+        }
+        
+        .nav-links a:hover {
+            color: #444CE7;
+        }
+        
+        /* HERO SECTION */
+        .hero {
+            padding: 80px 0 120px;
+        }
+        
+        .hero-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 24px;
+            align-items: center;
+        }
+        
+        .hero-content {
+            grid-column: 1 / 7;
+        }
+        
+        .hero-content h1 {
+            font-size: 60px;
+            font-weight: 700;
+            color: #1D2939;
+            line-height: 1.2;
+            margin-bottom: 24px;
+        }
+        
+        .hero-content p {
+            font-size: 18px;
+            color: #667085;
+            line-height: 1.56;
+            margin-bottom: 32px;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            padding: 16px 32px;
+            background: #444CE7;
+            color: #FFFFFF;
+            font-size: 16px;
+            font-weight: 600;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s;
+            box-shadow: 0 2px 8px rgba(68, 76, 231, 0.3);
+        }
+        
+        .cta-button:hover {
+            background: #3538B8;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(68, 76, 231, 0.4);
+        }
+        
+        .hero-image {
+            grid-column: 8 / 13;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .profile-circle {
+            width: 320px;
+            height: 320px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #444CE7 0%, #7C3AED 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 20px 40px rgba(68, 76, 231, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .profile-circle::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.2) 0%, transparent 50%);
+        }
+        
+        .avatar {
+            width: 280px;
+            height: 280px;
+            border-radius: 50%;
+            background: #FFFFFF;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .avatar-image {
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400"><defs><linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:%23E0E7FF;stop-opacity:1" /><stop offset="100%" style="stop-color:%23C7D2FE;stop-opacity:1" /></linearGradient></defs><rect width="400" height="400" fill="url(%23bg)"/><ellipse cx="200" cy="150" rx="60" ry="70" fill="%23818CF8"/><path d="M 80 400 Q 80 250 200 250 Q 320 250 320 400 Z" fill="%23818CF8"/><ellipse cx="170" cy="140" rx="8" ry="12" fill="%23312E81"/><ellipse cx="230" cy="140" rx="8" ry="12" fill="%23312E81"/><path d="M 180 170 Q 200 180 220 170" stroke="%23312E81" stroke-width="3" fill="none"/><rect x="140" y="90" width="120" height="40" rx="20" fill="%234338CA"/></svg>');
+            background-size: cover;
+            background-position: center;
+            border-radius: 50%;
+        }
+        
+        /* PROJECTS SECTION */
+        .projects {
+            padding: 60px 0 120px;
+            background: #F9FAFB;
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 40px;
+            font-weight: 700;
+            color: #1D2939;
+            margin-bottom: 64px;
+        }
+        
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 24px;
+        }
+        
+        .project-card {
+            grid-column: span 4;
+            background: #FFFFFF;
+            border: 1px solid #EAECF0;
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+        
+        .project-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .project-image {
+            width: 100%;
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #FFFFFF;
+            font-size: 80px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .project-image.project-1 {
+            background: linear-gradient(135deg, #444CE7 0%, #7C3AED 100%);
+        }
+        
+        .project-image.project-2 {
+            background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+        }
+        
+        .project-image.project-3 {
+            background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+        }
+        
+        .project-image::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translate(-50%, -50%); }
+            50% { transform: translate(-30%, -30%); }
+        }
+        
+        .project-mockup {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .browser-window {
+            width: 280px;
+            height: 160px;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+        }
+        
+        .browser-header {
+            height: 24px;
+            background: #E5E7EB;
+            display: flex;
+            align-items: center;
+            padding: 0 8px;
+            gap: 4px;
+        }
+        
+        .browser-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+        
+        .dot-red { background: #EF4444; }
+        .dot-yellow { background: #F59E0B; }
+        .dot-green { background: #10B981; }
+        
+        .browser-content {
+            height: 136px;
+            background: #F9FAFB;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+        }
+        
+        .mobile-frame {
+            width: 120px;
+            height: 160px;
+            background: white;
+            border-radius: 16px;
+            border: 3px solid #1F2937;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+        }
+        
+        .mobile-notch {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 16px;
+            background: #1F2937;
+            border-radius: 0 0 12px 12px;
+        }
+        
+        .mobile-screen {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 50px;
+            background: linear-gradient(135deg, #F3F4F6 0%, #E5E7EB 100%);
+        }
+        
+        .dashboard-frame {
+            width: 280px;
+            height: 160px;
+            background: white;
+            border-radius: 8px;
+            padding: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+        }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            height: 100%;
+        }
+        
+        .dashboard-card {
+            background: #F3F4F6;
+            border-radius: 6px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+        }
+        
+        .dashboard-card small {
+            font-size: 10px;
+            color: #6B7280;
+            margin-top: 4px;
+        }
+        
+        .project-content {
+            padding: 24px;
+        }
+        
+        .project-content h3 {
+            font-size: 22px;
+            font-weight: 600;
+            color: #1D2939;
+            margin-bottom: 12px;
+        }
+        
+        .project-content p {
+            font-size: 16px;
+            color: #667085;
+            line-height: 1.5;
+        }
+        
+        .project-tag {
+            display: inline-block;
+            padding: 4px 12px;
+            background: #F0F1FF;
+            color: #444CE7;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 12px;
+        }
+        
+        /* FOOTER */
+        footer {
+            background: #1D2939;
+            padding: 40px 0;
+        }
+        
+        .footer-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 32px;
+        }
+        
+        .footer-content p {
+            color: #FFFFFF;
+            font-size: 16px;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #FFFFFF;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 18px;
+            transition: all 0.3s;
+        }
+        
+        .social-icon:hover {
+            background: #444CE7;
+            transform: scale(1.1);
+        }
+        
+        /* CONTROLS */
+        .controls {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 10000;
+            display: flex;
+            gap: 12px;
+        }
+        
+        .control-btn {
+            background: #444CE7;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            font-size: 14px;
+            box-shadow: 0 4px 12px rgba(68, 76, 231, 0.3);
+            transition: all 0.3s;
+        }
+        
+        .control-btn:hover {
+            background: #3538B8;
+            transform: translateY(-2px);
+        }
+        
+        .control-btn.active {
+            background: #10B981;
+        }
+        
+        /* ANNOTATIONS */
+        .annotations {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.98);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            max-width: 280px;
+            border: 2px solid #444CE7;
+            z-index: 9998;
+            display: none;
+        }
+        
+        .annotations.active {
+            display: block;
+        }
+        
+        .annotations h4 {
+            color: #1D2939;
+            margin-bottom: 12px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .annotations ul {
+            list-style: none;
+            font-size: 12px;
+            color: #667085;
+        }
+        
+        .annotations li {
+            padding: 4px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .color-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <!-- GRID OVERLAY -->
+    <div class="grid-overlay" id="gridOverlay">
+        <div class="grid-columns">
+            <div class="grid-column"></div>
+            <div class="grid-column"></div>
+            <div class="grid-column"></div>
+            <div class="grid-column"></div>
+            <div class="grid-column"></div>
+            <div class="grid-column"></div>
+            <div class="grid-column"></div>
+            <div class="grid-column"></div>
+            <div class="grid-column"></div>
+            <div class="grid-column"></div>
+            <div class="grid-column"></div>
+            <div class="grid-column"></div>
+        </div>
+    </div>
+
+    <!-- CONTROLS -->
+    <div class="controls">
+        <button class="control-btn" id="gridToggle" onclick="toggleGrid()">📐 Grille</button>
+        <button class="control-btn" id="annotationToggle" onclick="toggleAnnotations()">📋 Infos</button>
+    </div>
+    
+    <!-- ANNOTATIONS PANEL -->
+    <div class="annotations" id="annotations">
+        <h4>🎨 Palette de Couleurs</h4>
+        <ul>
+            <li><span class="color-dot" style="background: #FFFFFF; border: 1px solid #ccc;"></span> #FFFFFF - Fond</li>
+            <li><span class="color-dot" style="background: #1D2939;"></span> #1D2939 - Titres</li>
+            <li><span class="color-dot" style="background: #667085;"></span> #667085 - Texte</li>
+            <li><span class="color-dot" style="background: #444CE7;"></span> #444CE7 - Accent</li>
+            <li><span class="color-dot" style="background: #F9FAFB;"></span> #F9FAFB - Surface</li>
+        </ul>
+        <br>
+        <h4>🖋️ Typographie</h4>
+        <ul>
+            <li>Police : Inter (Google Fonts)</li>
+            <li>H1 : Bold 60px</li>
+            <li>H2 : Bold 40px</li>
+            <li>H3 : SemiBold 22px</li>
+            <li>Body : Regular 18px</li>
+            <li>Nav : Medium 18px</li>
+        </ul>
+        <br>
+        <h4>📐 Grille & Dimensions</h4>
+        <ul>
+            <li><strong>Frame : 1280px</strong></li>
+            <li><strong>Colonnes : 12</strong></li>
+            <li><strong>Gutter : 24px</strong></li>
+            <li><strong>Marges : 80px</strong></li>
+            <li>Zone contenu : 1120px</li>
+        </ul>
+    </div>
+
+    <div class="page-wrapper">
+        <!-- HEADER -->
+        <header>
+            <div class="container">
+                <div class="header-grid">
+                    <div class="logo">Ahmed Satour</div>
+                    <ul class="nav-links">
+                        <li><a href="#projets">Projets</a></li>
+                        <li><a href="#apropos">À Propos</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+        </header>
+
+        <!-- HERO SECTION -->
+        <section class="hero">
+            <div class="container">
+                <div class="hero-grid">
+                    <div class="hero-content">
+                        <h1>Designer Web & Créateur d'Interfaces</h1>
+                        <p>Passionné par la création d'expériences digitales uniques et intuitives. Je transforme vos idées en designs modernes qui captivent vos utilisateurs.</p>
+                        <a href="#projets" class="cta-button">Découvrir mes projets</a>
+                    </div>
+                    <div class="hero-image">
+                        <div class="profile-circle">
+                            <div class="avatar">
+                                <div class="avatar-image"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PROJECTS SECTION -->
+        <section class="projects" id="projets">
+            <div class="container">
+                <h2 class="section-title">Mes Projets Récents</h2>
+                <div class="projects-grid">
+                    <!-- Project 1 -->
+                    <div class="project-card">
+                        <div class="project-image project-1">
+                            <div class="project-mockup">
+                                <div class="browser-window">
+                                    <div class="browser-header">
+                                        <span class="browser-dot dot-red"></span>
+                                        <span class="browser-dot dot-yellow"></span>
+                                        <span class="browser-dot dot-green"></span>
+                                    </div>
+                                    <div class="browser-content">
+                                        🛒
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="project-content">
+                            <h3>Boutique en Ligne</h3>
+                            <p>Conception d'une plateforme e-commerce moderne avec une expérience utilisateur optimisée pour maximiser les conversions.</p>
+                            <span class="project-tag">UX/UI Design</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Project 2 -->
+                    <div class="project-card">
+                        <div class="project-image project-2">
+                            <div class="project-mockup">
+                                <div class="mobile-frame">
+                                    <div class="mobile-notch"></div>
+                                    <div class="mobile-screen">
+                                        📱
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="project-content">
+                            <h3>Application Mobile</h3>
+                            <p>Design d'une application de gestion de tâches intuitive avec interface minimaliste et fonctionnalités avancées.</p>
+                            <span class="project-tag">Mobile App</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Project 3 -->
+                    <div class="project-card">
+                        <div class="project-image project-3">
+                            <div class="project-mockup">
+                                <div class="dashboard-frame">
+                                    <div class="dashboard-grid">
+                                        <div class="dashboard-card">
+                                            📊
+                                            <small>Stats</small>
+                                        </div>
+                                        <div class="dashboard-card">
+                                            📈
+                                            <small>Growth</small>
+                                        </div>
+                                        <div class="dashboard-card">
+                                            👥
+                                            <small>Users</small>
+                                        </div>
+                                        <div class="dashboard-card">
+                                            💰
+                                            <small>Revenue</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="project-content">
+                            <h3>Dashboard Analytics</h3>
+                            <p>Interface de visualisation de données complexes transformée en tableaux de bord clairs et actionnables pour les équipes.</p>
+                            <span class="project-tag">Data Viz</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer id="contact">
+            <div class="container">
+                <div class="footer-content">
+                    <p>ahmed.satour@exemple.com</p>
+                    <div class="social-links">
+                        <a href="#" class="social-icon" title="LinkedIn">in</a>
+                        <a href="#" class="social-icon" title="GitHub">gh</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        function toggleGrid() {
+            const overlay = document.getElementById('gridOverlay');
+            const btn = document.getElementById('gridToggle');
+            overlay.classList.toggle('active');
+            btn.classList.toggle('active');
+        }
+
+        function toggleAnnotations() {
+            const panel = document.getElementById('annotations');
+            const btn = document.getElementById('annotationToggle');
+            panel.classList.toggle('active');
+            btn.classList.toggle('active');
+        }
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
